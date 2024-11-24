@@ -5,7 +5,7 @@ from state import State, State_2
 import time
 from importlib import import_module
 
-f = open("C:\\Users\\HP\\Desktop\\BTL\\TTT_ultimate\\run.txt", "w")
+f = open("run.txt", "w")
 f.write("hello world\n")
 color = {"black": pygame.Color(0, 0, 0),
          "white": pygame.Color(255, 255, 255),
@@ -188,19 +188,21 @@ for i in range(100):
     record_game = []
     is_draw = 0
     is_loser = 0
-    play_auto('random_agent', '_MSSV', 2)
+    play_auto('_MSSV', 'random_agent', 2)
     if is_draw == 1:
         f.write(f"is_draw: {is_draw}\n")
         for move in record_game:
             f.write(repr(move))
             f.write("\n")
-    elif is_loser == -1:
+    elif is_loser == 1:
         f.write(f"is_loser: {is_loser}\n")
         for move in record_game:
             f.write(repr(move))
             f.write("\n")
     else:
         f.write(f"win {i}\n")
+    f.close()
+    f = open("run.txt", "a")
 
 f.write("DONE\n")
 # play_step_by_step('random_agent', '_MSSV', 2)

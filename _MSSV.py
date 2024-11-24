@@ -1,3 +1,4 @@
+from state import UltimateTTT_Move
 import numpy as np
 import copy
 import sys
@@ -115,14 +116,28 @@ def evaluate(state, prev_state):
     return Rt
 
 
-def minimax(state, prev_state, depth, cumulated_reward=0, maximize_player=True):
-    if depth == 0 or state.game_over:
-        # print (state, prev_state)
+def my_sort_func(a: UltimateTTT_Move):
+    if a.x == 1 and a.y == 1:
+        if a.index_local_board == 4:
+            return 3
+        else:
+            return 2
+    elif a.x == 0 and a.y == 0\
+            or a.x == 0 and a.y == 2\
+            or a.x == 2 and a.y == 0\
+            or a.x == 2 and a.y == 2:
+        return 1
+    else:
+        return 0
 
-        # exit()
+
+def minimax(state, prev_state, depth, cumulated_reward=0, maximize_player=True, alpha=-INFINITY, beta=INFINITY):
+    if depth == 0 or state.game_over:
+        # get the max depth or leaf nodes
         return cumulated_reward, None
-    
+
     moves = state.get_valid_moves
+    moves.sort(reverse=True, key=my_sort_func)
     # print("DEBUG---------------------------------------")
     # for debug in moves:
     #     print(debug)
@@ -131,9 +146,11 @@ def minimax(state, prev_state, depth, cumulated_reward=0, maximize_player=True):
     # print("DEBUG---------------------------------------\n")
 
     if (len(moves) == 0):
+        # no need
         return cumulated_reward, None
 
     if (len(moves) > 9):
+        # free moves
         newDepth = max(0, depth - 2)
     else:
         newDepth = depth - 1
@@ -147,10 +164,16 @@ def minimax(state, prev_state, depth, cumulated_reward=0, maximize_player=True):
             state_copy.act_move(move)
             reward = evaluate(state_copy, prev_state)
             eval, _ = minimax(state_copy, prev_state, newDepth,
-                              cumulated_reward + reward, False)
+                              cumulated_reward + reward, False, alpha, beta)
+
             if eval > best_score:
                 best_score = eval
                 best_move = move
+            # add alpha-beta cut-off
+            if eval > alpha:
+                alpha = eval
+            if beta <= alpha:
+                break
         return best_score, best_move
     else:
         best_score = INFINITY
@@ -161,10 +184,15 @@ def minimax(state, prev_state, depth, cumulated_reward=0, maximize_player=True):
             state_copy.act_move(move)
             reward = evaluate(state_copy, prev_state)
             eval, _ = minimax(state_copy, prev_state, newDepth,
-                              cumulated_reward + reward, True)
+                              cumulated_reward + reward, True, alpha, beta)
             if eval < best_score:
                 best_score = eval
                 best_move = move
+            # add alpha-beta cut-off
+            if eval < beta:
+                beta = eval
+            if beta <= alpha:
+                break
         return best_score, best_move
 
 
@@ -180,7 +208,7 @@ def select_move(cur_state, remain_time):
             go_first = True
         else:
             go_first = False
-    depth = 4
+    depth = 7
     eval, best_move = minimax(cur_state, cur_state,
                               depth, maximize_player=go_first)
 
