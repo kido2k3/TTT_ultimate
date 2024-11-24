@@ -151,7 +151,7 @@ def minimax(state, prev_state, depth, cumulated_reward=0, maximize_player=True, 
 
     if (len(moves) > 9):
         # free moves
-        newDepth = max(0, depth - 2)
+        newDepth = max(0, depth - 3)
     else:
         newDepth = depth - 1
 
@@ -208,7 +208,7 @@ def select_move(cur_state, remain_time):
             go_first = True
         else:
             go_first = False
-    depth = 7
+    depth = 6
     eval, best_move = minimax(cur_state, cur_state,
                               depth, maximize_player=go_first)
 
