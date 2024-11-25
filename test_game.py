@@ -4,7 +4,7 @@ from pygame.locals import K_TAB, QUIT, K_RIGHT
 from state import State, State_2
 import time
 from importlib import import_module
-
+import numpy
 f = open("run.txt", "w")
 f.write("hello world\n")
 color = {"black": pygame.Color(0, 0, 0),
@@ -184,6 +184,7 @@ def play_auto(player_X, player_O, rule=1):
 
 
 for i in range(100):
+    numpy.random.seed(i)
     print(i)
     record_game = []
     is_draw = 0

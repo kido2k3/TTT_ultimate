@@ -1,6 +1,6 @@
 import numpy as np
 
-np.random.seed(100)
+
 
 
 def select_move(cur_state, remain_time):

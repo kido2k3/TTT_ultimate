@@ -112,16 +112,19 @@ def evaluate(state, prev_state):
 def my_sort_func(a: UltimateTTT_Move):
     if a.x == 1 and a.y == 1:
         if a.index_local_board == 4:
-            return 3
+            return 4
         else:
-            return 2
+            return 0
     elif a.x == 0 and a.y == 0\
             or a.x == 0 and a.y == 2\
             or a.x == 2 and a.y == 0\
             or a.x == 2 and a.y == 2:
-        return 1
+        if a.x * 3 + a.y == a.index_local_board:
+            return 3.5
+        else:
+            return np.random.choice([3, 3.1, 3.2, 3.3])
     else:
-        return 0
+        return np.random.choice([2, 2.1, 2.2, 2.3])
 
 
 def minimax(state, prev_state, depth, cumulated_reward=0, maximize_player=True, alpha=-INFINITY, beta=INFINITY):
