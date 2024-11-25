@@ -102,17 +102,10 @@ def evaluate(state, prev_state):
     elif state.game_result(state.global_cells.reshape(3, 3)) == state.O:
         Rt = -400
     elif np.any(state.global_cells != prev_state.global_cells):
-        Rt = score_macro_current - score_macro_previous
+        Rt = 20 * (score_macro_current - score_macro_previous)
     else:
         Rt = (score_micro_current - score_micro_previous) * \
             (score_macro_current - score_macro_previous)
-    # print(Rt)
-
-    for cell in state.global_cells:
-        if cell == state.X:
-            Rt += 10
-        elif cell == state.O:
-            Rt -= 10
     return Rt
 
 
