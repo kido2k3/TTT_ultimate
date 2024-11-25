@@ -1,3 +1,4 @@
+from _MSSV import go_first
 import pygame
 import sys
 from pygame.locals import K_TAB, QUIT, K_RIGHT
@@ -151,7 +152,10 @@ def play_auto(player_X, player_O, rule=1):
                 sys.exit()
 
         if state.game_over or is_game_done:
-            is_loser = turn
+            if go_first:
+                is_loser = turn
+            else:
+                is_loser = -turn
             temp = state.game_result(state.global_cells.reshape(3, 3))
             if (temp == None):
                 is_draw = 1
